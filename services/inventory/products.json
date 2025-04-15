@@ -1,0 +1,26 @@
+[
+    {
+        "id": 1,
+        "name": "Nome do livro",
+        "author": "Autor do livro",
+        "quantity": 10,
+        "price": 21.22,
+        "photo": "/img/imagemdolivro.png"
+    },
+    {
+        "id": 2,
+        "name": "Nome do livro2",
+        "author": "Autor do livro2",
+        "quantity": 10,
+        "price": 21.22,
+        "photo": "/img/imagemdolivro2.png"
+    },
+    {
+        "id": 3,
+        "name": "Nome do livro3",
+        "author": "Autor do livro3",
+        "quantity": 10,
+        "price": 21.22,
+        "photo": "/img/imagemdolivro3.png"
+    }
+]

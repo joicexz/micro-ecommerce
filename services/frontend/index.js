@@ -68,3 +68,45 @@ function calculateShipping(id, cep) {
 }
 
 //Aguarda o carregamento completo do DOM
+document.addEventListener('DOMContentLoaded', function () {
+    const books = document.querySelector('.books'); //Seleciona o container onde os livros serão exibidos
+
+    //Busca os produtos (livros) do servidor
+    fetch('http://localhost:3000/products')
+        .then((data) => {
+            if (data.ok) {
+                return data.json(); //Converte a resposta para JSON se estiver ok
+            }
+            throw data.statusText;
+        })
+        .then((data) => {
+            if (data) {
+                //Para cada livro, cria e adiciona o elemento ao container
+                data.forEach((book) => {
+                    books.appendChild(newBook(book));
+                });
+
+                //Adiciona evento de clique aos botões de calcular frete
+                document.querySelectorAll('.button-shipping').forEach((btn) => {
+                    btn.addEventListener('click', (e) => {
+                        const id = e.target.getAttribute('data-id'); // Pega o ID do livro
+                        const cep = document.querySelector(`.book[data-id="${id}"] input`).value; //Pega o CEP digitado
+                        calculateShipping(id, cep); //Chama a função de frete
+                    });
+                });
+
+                //Adiciona evento de clique aos botões de compra
+                document.querySelectorAll('.button-buy').forEach((btn) => {
+                    btn.addEventListener('click', (e) => {
+                        swal('Compra de livro', 'Sua compra foi realizada com sucesso', 'sucess');
+                    });
+                });
+            }
+        })
+
+        .catch((err) => {
+            //Em caso de erro ao carregar os produtos
+            swal('Erro', 'Erro ao listar os produtos', 'error');
+            console.log(err);
+        });
+});
