@@ -1,26 +1,42 @@
 [
     {
         "id": 1,
-        "name": "Nome do livro",
-        "author": "Autor do livro",
-        "quantity": 10,
-        "price": 21.22,
-        "photo": "/img/imagemdolivro.png"
+        "name": "O Ladrão de Raios",
+        "author": "Rick Riordan",
+        "quantity": 12,
+        "price": 30.90,
+        "photo": "./img/livro1.jpeg"
     },
     {
         "id": 2,
-        "name": "Nome do livro2",
-        "author": "Autor do livro2",
-        "quantity": 10,
-        "price": 21.22,
-        "photo": "/img/imagemdolivro2.png"
+        "name": "O Mar de Monstros",
+        "author": "Rick Riordan",
+        "quantity": 2,
+        "price": 29.22,
+        "photo": "./img/livro2.jpeg"
     },
     {
         "id": 3,
-        "name": "Nome do livro3",
-        "author": "Autor do livro3",
-        "quantity": 10,
-        "price": 21.22,
-        "photo": "/img/imagemdolivro3.png"
+        "name": "A Maldição do Titã",
+        "author": "Rick Riordan",
+        "quantity": 8,
+        "price": 32.50,
+        "photo": "./img/livro3.jpeg"
+    },
+    {
+        "id": 4,
+        "name": "A Batalha do Labirinto",
+        "author": "Rick Riordan",
+        "quantity": 5,
+        "price": 40.00,
+        "photo": "./img/livro4.jpeg"
+    },
+    {
+        "id": 5,
+        "name": "O Último Olimpiano",
+        "author": "Rick Riordan",
+        "quantity": 34,
+        "price": 42.50,
+        "photo": "./img/livro5.gif"
     }
 ]

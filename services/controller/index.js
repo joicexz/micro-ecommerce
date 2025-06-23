@@ -1,66 +1,70 @@
-//Importa o framework web Express para criar rotas HTTP
 const express = require('express');
+const cors = require('cors');
+const path = require('path');
 
-//Importa o cliente gRPC para o serviço de frete
-const shipping = require('.shipping');
 
-//Importa o cliente gRPC para o serviço de produtos
+// Importações corretas dos serviços gRPC
+const shipping = require('./shipping');
 const inventory = require('./inventory');
 
-//Importa middleware pra permitir requisições cross-origin (CORS)
-const cors = require('cors');
-
-//Inicializa o aplicativo Express
 const app = express();
 
-//Aplica o middleware de CORS para permitir que op frontend em outro domínio consuma a API
+// Habilita CORS para permitir requisições do frontend
 app.use(cors());
 
-/*
-* Retorna a lista de produtos da loja via InventoryService
- */
-app.get('products', (req, res, next) => {
-    //Chama o método gRPC SearchAllProducts do microsserviço de inventário
-    inventory.SearchAllProducts(null, (err, data) => {
-        if (err) {
-            //Se houver erro, loga no console  e retorna erro HTTP 500
-            console.error(err);
-            res.status(500).send({ error: 'algo falhou' });
-        } else {
-            //Se sucesso, responde com a lista de produtos no formato JSON
-            res.json(data.products);
-        }
-    });
+// Serve arquivos estáticos da interface (HTML, CSS, JS)
+app.use(express.static(path.join(__dirname, '../frontend')));
+
+// Rota inicial: pode mostrar uma mensagem ou carregar o index.html automaticamente
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
-/*
-*Consulta o frete de envio no ShippingService
-*/
-app.get('/shipping/:cep', (req, res, next) => {
-    //Chama o método gRPC GetShippingRate, passando o CEP como parametro
-    shipping.GetShippingRate(
-        {
-            cep: req.params.cep, //Pega o cep da URL
-        },
-        (err, data) => {
-            if (err) {
-                //Em caso de erro, loga e retorna 500
-                console.error(err);
-                res.status(500).send({ error: 'algo falhou' });
-            } else {
-                //Retorna o cep consultado e o valor do frete calculado
-                res.json({
-                    cep: req.params.cep,
-                    value: data.value,
-                });
-            }
-        }
-    );
+// Rota para retornar todos os produtos
+app.get('/products', (req, res) => {
+  inventory.searchAllProducts(null, (err, data) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send({ error: 'Algo falhou' });
+    } else {
+      res.json(data.products);
+    }
+  });
 });
 
-/*
-*Inicia o router (rotas)
-*/
+// Rota para consultar o frete com base no CEP
+app.get('/shipping/:cep', (req, res) => {
+  shipping.GetShippingRate({ cep: req.params.cep }, (err, data) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send({ error: 'Algo falhou' });
+    } else {
+      res.json({
+        cep: req.params.cep,
+        value: data.value,
+      });
+    }
+  });
+});
+
+app.get('/product/:id', (req, res, next) => {
+  // Chama método do microsserviço.
+  inventory.SearchProductByID({ id: req.params.id }, (err, product) => {
+    // Se ocorrer algum erro de comunicação
+    // com o microsserviço, retorna para o navegador.
+    if (err) {
+      console.error(err);
+      res.status(500).send({ error: 'something failed :(' });
+    } else {
+      // Caso contrário, retorna resultado do
+      // microsserviço (um arquivo JSON) com os dados
+      // do produto pesquisado
+      res.json(product);
+    }
+  });
+});
+
+// Inicia o servidor na porta 3000
 app.listen(3000, () => {
-    console.log('Serviço de Controller rodando em http://127.0.0.1:3000');
+  console.log('Serviço de Controller rodando em http://127.0.0.1:3000');
 });

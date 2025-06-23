@@ -2,14 +2,14 @@
 syntax = "proto3";
 
 //Declaração do serviço gRPC chamado "ShippingService"
-service.ShippingService{
+service ShippingService {
     //Define o método remoto "GetShippingRate"
     //Este método recebe um "ShippingPayload e retorna um "ShippingResponse"
-    rpc GetShippingRate(Shippingload) returns (ShippingResponse) {}
+    rpc GetShippingRate(ShippingPayload) returns (ShippingResponse) {}
 }
 
 //Define a mensagem que será enviada pelo cliente como entrada do método GetShippingRate
-message Shippingload{
+message ShippingPayload {
     //Campo que representa o CEP (código postal) para o qual será calculado o frete
     string cep = 1; //Campo 1 do tipo string
 }
